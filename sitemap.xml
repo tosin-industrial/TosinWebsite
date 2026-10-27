@@ -1,3 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="https://www.tosin.com.tw/wp-sitemap-index.xsl" ?>
-<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><sitemap><loc>https://www.tosin.com.tw/wp-sitemap-posts-page-1.xml</loc></sitemap><sitemap><loc>https://www.tosin.com.tw/zh/wp-sitemap-posts-page-1.xml</loc></sitemap><sitemap><loc>https://www.tosin.com.tw/wp-sitemap-users-1.xml</loc></sitemap><sitemap><loc>https://www.tosin.com.tw/zh/wp-sitemap-users-1.xml</loc></sitemap></sitemapindex>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://www.tosin.com.tw/about-us/</loc></url>
+  <url><loc>https://www.tosin.com.tw/contact-us/</loc></url>
+  <url><loc>https://www.tosin.com.tw/equipment/</loc></url>
+  <url><loc>https://www.tosin.com.tw/</loc></url>
+  <url><loc>https://www.tosin.com.tw/material/</loc></url>
+  <url><loc>https://www.tosin.com.tw/products/customized-product/</loc></url>
+  <url><loc>https://www.tosin.com.tw/products/grommet/</loc></url>
+  <url><loc>https://www.tosin.com.tw/products/hydraulic-seal/</loc></url>
+  <url><loc>https://www.tosin.com.tw/products/</loc></url>
+  <url><loc>https://www.tosin.com.tw/products/metal-bonded-rubber-seal/</loc></url>
+  <url><loc>https://www.tosin.com.tw/products/metal-filter/</loc></url>
+  <url><loc>https://www.tosin.com.tw/products/o-ring/</loc></url>
+  <url><loc>https://www.tosin.com.tw/products/sucker/</loc></url>
+  <url><loc>https://www.tosin.com.tw/products/washer-gasket/</loc></url>
+  <url><loc>https://www.tosin.com.tw/quality/</loc></url>
+  <url><loc>https://www.tosin.com.tw/zh/about-us-zh/</loc></url>
+  <url><loc>https://www.tosin.com.tw/zh/contact-us-zh/</loc></url>
+  <url><loc>https://www.tosin.com.tw/zh/equipment-zh/</loc></url>
+  <url><loc>https://www.tosin.com.tw/zh/</loc></url>
+  <url><loc>https://www.tosin.com.tw/zh/material-zh/</loc></url>
+  <url><loc>https://www.tosin.com.tw/zh/products-zh/customized-product-zh/</loc></url>
+  <url><loc>https://www.tosin.com.tw/zh/products-zh/grommet-zh/</loc></url>
+  <url><loc>https://www.tosin.com.tw/zh/products-zh/hydraulic-seal-zh/</loc></url>
+  <url><loc>https://www.tosin.com.tw/zh/products-zh/</loc></url>
+  <url><loc>https://www.tosin.com.tw/zh/products-zh/metal-bonded-rubber-seal-zh/</loc></url>
+  <url><loc>https://www.tosin.com.tw/zh/products-zh/metal-filter-zh/</loc></url>
+  <url><loc>https://www.tosin.com.tw/zh/products-zh/o-ring-zh/</loc></url>
+  <url><loc>https://www.tosin.com.tw/zh/products-zh/sucker-zh/</loc></url>
+  <url><loc>https://www.tosin.com.tw/zh/products-zh/washer-gasket-zh/</loc></url>
+  <url><loc>https://www.tosin.com.tw/zh/quality-zh/</loc></url>
+</urlset>
