@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-"""一次性抽取腳本：把 HTTrack 抓下來的 WordPress 靜態頁拆成 src/pages/ 的內容檔。
+"""一次性抽取腳本：把 HTTrack 抓下來的 WordPress 靜態頁拆成 _src/pages/ 的內容檔。
 
-用法：python tools/extract.py <舊網站根目錄> <輸出的 repo 根目錄>
+用法：python _tools/extract.py <舊網站根目錄> <輸出的 repo 根目錄>
 （舊網站根目錄通常是 main 分支的 checkout。重建完成後此腳本已無用途，留存備查。）
 """
 import json
@@ -128,7 +128,7 @@ def main():
     for page_url in PAGES:
         meta, kit, page_css, body = extract(old_root, page_url)
         kits.add(kit)
-        dest = os.path.join(out_root, 'src', 'pages', page_file(page_url))
+        dest = os.path.join(out_root, '_src', 'pages', page_file(page_url))
         os.makedirs(os.path.dirname(dest), exist_ok=True)
         with open(dest, 'w', encoding='utf-8', newline='\n') as f:
             f.write('<!--page\n' + json.dumps(meta, ensure_ascii=False, indent=2) + '\n-->\n')
@@ -137,7 +137,7 @@ def main():
             f.write(body.strip('\n') + '\n')
         print('ok', page_url or '/')
     print('kit 樣式種類：', len(kits))
-    with open(os.path.join(out_root, 'tools', 'kit.css'), 'w', encoding='utf-8', newline='\n') as f:
+    with open(os.path.join(out_root, '_tools', 'kit.css'), 'w', encoding='utf-8', newline='\n') as f:
         f.write(sorted(kits)[0] + '\n')
 
 

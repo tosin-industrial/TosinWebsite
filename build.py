@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 """騰信工業官網產生器（只用 Python 標準函式庫）。
 
-讀 src/ 之後，在 repo 根目錄產生 30 個 */index.html 與 sitemap.xml。
+讀 _src/ 之後，在 repo 根目錄產生 30 個 */index.html 與 sitemap.xml。
 執行：python build.py
 重複執行結果完全相同（冪等），產生的檔案一律是 UTF-8、LF 換行。
 
-  src/layout/site.json   全站設定：選單、語言字串、GA、email
-  src/layout/layout.html 共用版型（<head>、頁首、手機選單、頁尾）
-  src/pages/**.html      每頁一檔：開頭 <!--page {...} --> 是該頁設定，其後是正文
+  _src/layout/site.json   全站設定：選單、語言字串、GA、email
+  _src/layout/layout.html 共用版型（<head>、頁首、手機選單、頁尾）
+  _src/pages/**.html      每頁一檔：開頭 <!--page {...} --> 是該頁設定，其後是正文
 """
 import glob
 import hashlib
@@ -17,7 +17,7 @@ import os
 import re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-SRC = os.path.join(ROOT, 'src')
+SRC = os.path.join(ROOT, '_src')
 
 ARROW_DESKTOP = ('<span class="ct-toggle-dropdown-desktop"><svg class="ct-icon" width="8" height="8" viewBox="0 0 15 15" aria-hidden="true">'
                  '<path d="M2.1,3.2l5.4,5.4l5.4-5.4L15,4.3l-7.5,7.5L0,4.3L2.1,3.2z"/></svg></span>')
@@ -42,7 +42,8 @@ def write_if_changed(path, text):
     data = text.encode('utf-8')
     if os.path.exists(path):
         with open(path, 'rb') as f:
-            if f.read() == data:
+            # Windows 簽出時 git 會把 LF 轉成 CRLF，比對前統一換行，避免誤判成有變動
+            if f.read().replace(b'\r\n', b'\n') == data:
                 return False
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, 'wb') as f:
@@ -53,7 +54,8 @@ def write_if_changed(path, text):
 def asset(url_path):
     """回傳帶版本參數的資源網址（內容改了版本就變，避免瀏覽器快取舊檔）。"""
     with open(os.path.join(ROOT, url_path.lstrip('/')), 'rb') as f:
-        digest = hashlib.md5(f.read()).hexdigest()[:8]
+        # 統一換行再算雜湊，Windows（CRLF）與雲端（LF）才會得到相同版本號
+        digest = hashlib.md5(f.read().replace(b'\r\n', b'\n')).hexdigest()[:8]
     return '%s?v=%s' % (url_path, digest)
 
 

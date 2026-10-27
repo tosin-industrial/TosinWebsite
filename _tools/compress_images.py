@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """一次性工具：壓縮超過 300KB 的 JPG／PNG（需要 Pillow）。
 
-用法：python tools/compress_images.py
+用法：python _tools/compress_images.py
 - 檔名、路徑不變（保留 Google 圖片收錄）
 - 寬度不超過網頁上最大顯示寬度的約 2 倍、上限 2000px，絕不放大
 - JPEG 品質 82、progressive，保留 ICC 色彩描述檔，去掉其他 EXIF

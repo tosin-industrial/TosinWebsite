@@ -2,7 +2,7 @@
 """一次性工具：把 WordPress（Blocksy 主題＋Elementor）的 CSS 合併成 assets/css/ 下的檔案，
 並刪掉 30 頁都用不到的規則。
 
-用法：python tools/build_css.py <舊網站根目錄（main 分支 checkout）>
+用法：python _tools/build_css.py <舊網站根目錄（main 分支 checkout）>
 需先執行過 build.py（要掃描產生出來的 30 頁 HTML 有哪些 class/id）。
 
 刪除規則的判斷很保守：
@@ -32,7 +32,7 @@ SITE_PARTS = [
     ('file', BLOCKSY + 'page-title.min.css'),
     ('file', BLOCKSY + 'elementor-frontend.min.css'),
     ('file', EL + 'css/frontend.min.css'),
-    ('kit', 'tools/kit.css'),
+    ('kit', '_tools/kit.css'),
 ]
 WIDGET_PARTS = [
     ('file', EL + 'css/widget-heading.min.css'),
@@ -304,7 +304,7 @@ def load_parts(old_root, parts, fonts):
 def scan_pages():
     classes, ids, text_chars, blob = set(), set(), set(), []
     files = [os.path.join(ROOT, 'index.html')] + glob.glob(os.path.join(ROOT, '*', '**', 'index.html'), recursive=True)
-    files = [f for f in files if '/wp-' not in f.replace(os.sep, '/') and not f.replace(os.sep, '/').startswith(ROOT.replace(os.sep, '/') + '/src/')]
+    files = [f for f in files if '/wp-' not in f.replace(os.sep, '/') and not f.replace(os.sep, '/').startswith(ROOT.replace(os.sep, '/') + '/_src/')]
     js = [os.path.join(ROOT, 'assets', 'js', 'site.js')]
     for f in files + js:
         h = open(f, encoding='utf-8').read()
@@ -391,7 +391,7 @@ def main():
     used_fonts = set()
     nodes_by_file = finalize(nodes_by_file, blob, chars, used_fonts)
     os.makedirs(os.path.join(ROOT, 'assets', 'css'), exist_ok=True)
-    header = '/* 由 tools/build_css.py 從原 WordPress（Blocksy 2.1 + Elementor 3.35）樣式合併精簡而成。 */\n'
+    header = '/* 由 _tools/build_css.py 從原 WordPress（Blocksy 2.1 + Elementor 3.35）樣式合併精簡而成。 */\n'
     for name, nodes in nodes_by_file.items():
         out = header + serialize(nodes) + '\n'
         with open(os.path.join(ROOT, 'assets', 'css', name), 'w', encoding='utf-8', newline='\n') as f:

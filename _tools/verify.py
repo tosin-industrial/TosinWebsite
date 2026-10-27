@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """檢查工具（只用標準函式庫）。
 
-  python tools/verify.py                 檢查目前網站：站內連結與資源檔是否存在、canonical/hreflang、sitemap
-  python tools/verify.py <舊網站根目錄>    另外逐頁比對新舊版：可見文字、圖片清單、連結清單
+  python _tools/verify.py                 檢查目前網站：站內連結與資源檔是否存在、canonical/hreflang、sitemap
+  python _tools/verify.py <舊網站根目錄>    另外逐頁比對新舊版：可見文字、圖片清單、連結清單
 """
 import glob
 import html
@@ -86,7 +86,7 @@ def pages():
     out = []
     for path in [os.path.join(ROOT, 'index.html')] + sorted(glob.glob(os.path.join(ROOT, '*', '**', 'index.html'), recursive=True)):
         rel = os.path.relpath(path, ROOT).replace(os.sep, '/')
-        if rel.startswith(('src/', 'tools/', 'wp-', 'assets/')):
+        if rel.startswith(('_src/', '_tools/', 'wp-', 'assets/')):
             continue
         url = '/' + rel[:-len('index.html')]
         out.append((url, path))
