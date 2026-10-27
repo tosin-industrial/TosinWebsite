@@ -4,6 +4,7 @@ __pycache__/
 
 # 自動化處理腳本與設定檔
 clean_static.py
+check_site.py
 .env
 
 # Claude Code 專案本地設定 (本機預覽伺服器、權限設定)
