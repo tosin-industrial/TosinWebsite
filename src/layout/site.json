@@ -1,0 +1,116 @@
+{
+  "_說明": "全站共用設定。改選單只要改這個檔的 menu；id 是舊 WordPress 的選單編號，只用來產生 CSS class，新增項目時填一個沒用過的數字即可。",
+  "site_url": "https://www.tosin.com.tw",
+  "ga4": "G-693T6TNP9J",
+  "email": "sales@tosin.com.tw",
+  "languages": {
+    "en": {
+      "html_lang": "en-US",
+      "home": "/",
+      "search_action": "https://www.tosin.com.tw/",
+      "menu_ul_id": "menu-menu-in-en",
+      "menu": [
+        {"id": 159, "url": "/", "label": "Home", "home": true},
+        {"id": 157, "url": "/about-us/", "label": "About Us"},
+        {"id": 312, "url": "/products/", "label": "Product", "children": [
+          {"id": 1397, "url": "/products/o-ring/", "label": "O-Ring"},
+          {"id": 1407, "url": "/products/hydraulic-seal/", "label": "Hydraulic Seal"},
+          {"id": 1420, "url": "/products/washer-gasket/", "label": "Washer/Gasket"},
+          {"id": 1423, "url": "/products/grommet/", "label": "Grommet"},
+          {"id": 1426, "url": "/products/sucker/", "label": "Sucker"},
+          {"id": 1429, "url": "/products/metal-filter/", "label": "Metal Filter"},
+          {"id": 1432, "url": "/products/metal-bonded-rubber-seal/", "label": "Metal-Bonded Rubber Seal"},
+          {"id": 1435, "url": "/products/customized-product/", "label": "Customized Product"}
+        ]},
+        {"id": 386, "url": "/quality/", "label": "Quality"},
+        {"id": 158, "url": "/equipment/", "label": "Equipment"},
+        {"id": 207, "url": "/material/", "label": "Material"},
+        {"id": 176, "url": "/contact-us/", "label": "Contact Us"}
+      ],
+      "lang_switch": {
+        "id": "1284-zh",
+        "class": "lang-item lang-item-28 lang-item-zh lang-item-first",
+        "hreflang": "zh-TW",
+        "alt": "中文 (台灣)",
+        "flag": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAALCAMAAABBPP0LAAAAVFBMVEUAILQAGrEAEazhAAD5AADwAACBot+5ued2mNv6aWv7X1/5UVHoAACWltz5+fz+/v5ahNPyRkv5QkL5OTn2MTH3Kir1JiZOe87rOkb1Hh70FRXyDQ3JFHMOAAAAU0lEQVR4AQXBgQ3CMBAAMV8+Iuy/LKhUgB0kRchDfksRbU59R1Xd14If51QNK3Ndc6im7Hg63DVhr/kct2pSr8WRahIWUk1i2XrHo7tYbB8IL/AHd28PeH6kKkoAAAAASUVORK5CYII="
+      },
+      "t": {
+        "skip": "Skip to content",
+        "search_modal": "Search modal",
+        "close_search": "Close search modal",
+        "search": "Search",
+        "search_for": "Search for...",
+        "search_button": "Search button",
+        "no_results": "No results",
+        "offcanvas": "Offcanvas modal",
+        "close_drawer": "Close drawer",
+        "menu_label": "Menu in EN",
+        "site_title": "Tosin",
+        "menu": "Menu",
+        "expand": "Expand dropdown menu",
+        "collapse": "Collapse dropdown menu",
+        "footer_title": "Never-Ending Improvement",
+        "footer_desc": "Moulded Rubber Parts Manufacturer",
+        "email": "E-mail：",
+        "phone": "Phone：",
+        "address_label": "Address：",
+        "address": "No 117, Lane 460, Nan Shin 2 Sec Chung Feng Rd, Pin Chen District Taoyuan City, Taiwan 32472",
+        "back_to_top": "Go to top"
+      }
+    },
+    "zh": {
+      "html_lang": "zh-TW",
+      "home": "/zh/",
+      "search_action": "https://www.tosin.com.tw/zh/",
+      "menu_ul_id": "menu-menu-in-zh",
+      "menu": [
+        {"id": 1279, "url": "/zh/", "label": "首頁", "home": true},
+        {"id": 1334, "url": "/zh/about-us-zh/", "label": "關於騰信"},
+        {"id": 1518, "url": "/zh/products-zh/", "label": "產品類別", "children": [
+          {"id": 1512, "url": "/zh/products-zh/o-ring-zh/", "label": "O-Ring"},
+          {"id": 1506, "url": "/zh/products-zh/hydraulic-seal-zh/", "label": "液壓密封件"},
+          {"id": 1500, "url": "/zh/products-zh/washer-gasket-zh/", "label": "華司/墊圈"},
+          {"id": 1494, "url": "/zh/products-zh/grommet-zh/", "label": "線套"},
+          {"id": 1488, "url": "/zh/products-zh/sucker-zh/", "label": "吸盤"},
+          {"id": 1482, "url": "/zh/products-zh/metal-filter-zh/", "label": "金屬濾網"},
+          {"id": 1476, "url": "/zh/products-zh/metal-bonded-rubber-seal-zh/", "label": "金屬複合件"},
+          {"id": 1470, "url": "/zh/products-zh/customized-product-zh/", "label": "客製品"}
+        ]},
+        {"id": 1328, "url": "/zh/quality-zh/", "label": "品質認證"},
+        {"id": 1322, "url": "/zh/equipment-zh/", "label": "生產設備"},
+        {"id": 1316, "url": "/zh/material-zh/", "label": "材料總覽"},
+        {"id": 1309, "url": "/zh/contact-us-zh/", "label": "聯絡我們"}
+      ],
+      "lang_switch": {
+        "id": "1286-en",
+        "class": "lang-item lang-item-25 lang-item-en lang-item-first",
+        "hreflang": "en-US",
+        "alt": "English",
+        "flag": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAALCAMAAABBPP0LAAAAmVBMVEViZsViZMJiYrf9gnL8eWrlYkjgYkjZYkj8/PujwPybvPz4+PetraBEgfo+fvo3efkydfkqcvj8Y2T8UlL8Q0P8MzP9k4Hz8/Lu7u4DdPj9/VrKysI9fPoDc/EAZ7z7IiLHYkjp6ekCcOTk5OIASbfY/v21takAJrT5Dg6sYkjc3Nn94t2RkYD+y8KeYkjs/v7l5fz0dF22YkjWvcOLAAAAgElEQVR4AR2KNULFQBgGZ5J13KGGKvc/Cw1uPe62eb9+Jr1EUBFHSgxxjP2Eca6AfUSfVlUfBvm1Ui1bqafctqMndNkXpb01h5TLx4b6TIXgwOCHfjv+/Pz+5vPRw7txGWT2h6yO0/GaYltIp5PT1dEpLNPL/SdWjYjAAZtvRPgHJX4Xio+DSrkAAAAASUVORK5CYII="
+      },
+      "t": {
+        "skip": "跳至主要內容",
+        "search_modal": "搜尋對話框",
+        "close_search": "關閉搜尋互動視窗",
+        "search": "搜尋",
+        "search_for": "搜尋...",
+        "search_button": "搜尋按鈕",
+        "no_results": "找不到符合條件的結果",
+        "offcanvas": "滑入對話框",
+        "close_drawer": "關閉側選單",
+        "menu_label": "Menu in EN",
+        "site_title": "騰信工業",
+        "menu": "選單",
+        "expand": "展開下拉選單",
+        "collapse": "收合下拉選單",
+        "footer_title": "騰躍未來 信賴之選",
+        "footer_desc": "騰信工業 — 橡膠材料開拓者",
+        "email": "E-mail：",
+        "phone": "電話：",
+        "address_label": "地址：",
+        "address": "324 桃園市平鎮區中豐路南勢二段460巷117號",
+        "back_to_top": "到最上面"
+      }
+    }
+  }
+}
