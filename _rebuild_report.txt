@@ -1,0 +1,178 @@
+騰信官網靜態重建報告（static-rebuild 分支）
+==========================================
+本檔案合併到 main 前請刪除。
+（檔名以底線開頭，GitHub Pages 的 Jekyll 預設不會發布它，但仍建議刪除。）
+
+
+一、新結構
+----------
+build.py                  產生器，只用 Python 標準函式庫。執行 python build.py
+                          → 產生 30 個 */index.html 與 sitemap.xml（路徑與原本完全相同）
+                          連跑兩次結果相同（第二次顯示「0 個檔案有變動」）。
+src/layout/site.json      全站設定：中英選單、頁首頁尾的中英文字、GA4 編號、email
+src/layout/layout.html    共用版型：<head>、頁首、手機側選單、搜尋框、頁尾、回到頂端
+src/pages/**.html         每頁一檔（30 檔），檔名對應網址，例如
+                            src/pages/products/o-ring.html       → /products/o-ring/
+                            src/pages/zh/products-zh/o-ring-zh.html → /zh/products-zh/o-ring-zh/
+                          檔案開頭 <!--page {...} --> 是該頁設定（JSON）：
+                            url、lang（en/zh）、title、hreflang（en/zh/x-default 三個完整網址）、
+                            body_class、carousel（true 才載入輪播程式）、scripts（額外載入的外部 JS，例如 fslightbox）
+                          接著可有一段 <style data-page-css>（該頁專屬樣式，原 Elementor 產生），其後是正文。
+assets/css/site.css       Blocksy 主題＋Elementor 核心樣式（精簡後）
+assets/css/widgets.css    Elementor 元件樣式、進場動畫、Swiper、字型、原本延遲載入的樣式（精簡後）
+assets/css/no-scripts.css 瀏覽器關閉 JS 時用（原樣保留）
+assets/fonts/             14 個字型檔（原 66 個，只留網站實際用到的字元範圍）
+assets/js/site.js         自寫小程式（約 12KB），取代 jQuery、jquery-migrate、jquery-ui、
+                          Elementor frontend／webpack、Blocksy main.js
+assets/vendor/swiper/     Swiper 8.4.5（原 Elementor 內附版本），只在首頁、設備頁中英共 4 頁載入
+wp-content/uploads/...    30 頁實際引用的 73 個圖檔，路徑不變
+tools/                    一次性工具（重建時用，平常不必執行）：
+                            extract.py         從舊 HTML 抽出內容
+                            build_css.py       合併精簡 CSS
+                            compress_images.py 壓縮大圖
+                            verify.py          檢查工具（見第三節），以後改完網站也可以跑
+                            kit.css            build_css.py 需要的 Elementor 全站樣式片段
+                          extract.py、build_css.py 需要舊網站檔案，用法：
+                            git worktree add ../old main   （或任何 main 時期的 checkout）
+                            python tools/build_css.py ../old
+
+site.js 處理的互動（逐一盤點原 Blocksy／Elementor 實際用到的功能）：
+  1. 手機版側選單（offcanvas）開關：漢堡鈕開、X 鈕／點背景／Esc 關，開啟時鎖住頁面捲動
+  2. 搜尋視窗開關（開啟時自動聚焦輸入框）
+  3. 手機選單「產品」子選單展開／收合
+  4. 桌機選單「產品」下拉：滑鼠移入、鍵盤 Tab 都會展開；超出視窗右緣自動改往左
+  5. 回到頂端按鈕：捲動超過 300px 出現（與原 Blocksy 相同），手機版照原樣隱藏
+  6. Elementor 進場動畫：用 IntersectionObserver 捲到才淡入；JS 沒跑或使用者設定減少動態時直接顯示，
+     另有 3 秒保險機制，不會永遠隱形
+  7. 圖片輪播：依 Elementor 原設定（每頁張數、手機／平板張數、間距、自動播放 5 秒、滑鼠移入暫停、
+     箭頭、圓點、無限循環）換算成 Swiper 參數，斷點換算方式照抄 Elementor
+  語言切換、Sticky header：原網站沒有 sticky header；語言切換是一般連結（國旗），不需要 JS。
+  fslightbox 燈箱（jsDelivr）、聯絡頁 Google 地圖 iframe、speculationrules、GA4 都照原樣保留。
+
+
+二、以後怎麼改
+--------------
+改選單：只改 src/layout/site.json 的 languages.en.menu／languages.zh.menu，然後 python build.py。
+        桌機選單、手機選單、頁尾選單三處會同時更新；目前頁面的反白會自動判斷。
+        新增項目的 id 隨便填一個沒用過的數字（只用來產生 CSS class）。
+改頁首頁尾文字（地址、電話標題、口號等）：src/layout/site.json 的 t 區塊。
+改某頁內容：改 src/pages/ 下對應的檔案，再 python build.py。不要直接改根目錄的 index.html，
+        下次 build 會被覆蓋。
+新增一頁：
+  1. 複製一個相似的頁面檔（例如 src/pages/products/o-ring.html）成新檔名
+  2. 改開頭設定的 url、title、hreflang（中英兩頁要互相指向，x-default 指英文版）、
+     body_class 裡的 page-id-數字 與 elementor-page-數字（給新頁一個沒用過的數字，例如 9001）
+  3. 改正文；若沿用別頁的 <style data-page-css>，裡面的 .elementor-數字 要跟著改成新數字
+  4. 需要的話在 site.json 選單加上新頁
+  5. python build.py（sitemap.xml 會自動加入新頁），再 python tools/verify.py 檢查
+注意：CSS 已刪掉目前 30 頁用不到的規則。若新頁用到原網站沒用過的 Elementor 元件
+     （例如手風琴、分頁籤、表單），樣式會缺，需要另外補 CSS。原始 CSS 在 main 分支的 git 歷史裡。
+
+
+三、驗證結果
+------------
+1. 新舊逐頁比對（tools/verify.py，舊版為 main 分支）：
+   - 標題：30 頁全部一致
+   - 可見文字（去空白後，含圖片 alt、輸入框提示字）：30 頁全部一致
+   - 圖片清單（img src、srcset 各尺寸、inline 與頁面 <style> 的背景圖）：30 頁全部一致
+   - 連結清單：只有一類差異，見下方「已知差異 1」
+2. 站內連結與資源檔：30 頁所有站內連結、圖片、CSS、JS、icon 都存在；CSS 引用的字型都存在。
+3. SEO：每頁 canonical＝自身完整網址；hreflang en／zh／x-default 齊全、都是絕對網址、
+   x-default＝英文版、互相對應的頁都存在；sitemap.xml 恰好 30 筆，格式與排序沿用原檔。
+   robots.txt、CNAME 未更動。GA4 G-693T6TNP9J 每頁都有。
+   原網站沒有 meta description 與 OG 標籤（已檢查 30 頁），所以沒有可照搬的；title 與
+   <meta name='robots' content='max-image-preview:large'> 照搬。
+4. 無頭瀏覽器（Chromium）截圖比對，新舊版各 30 頁：
+   - 手機寬 390px：30 頁像素完全一致
+   - 桌機寬 1400px：26 頁像素完全一致；首頁、關於我們（中英）有 0.01%～0.14% 像素差異，
+     是圖片重新壓縮造成的細微色差（壓圖前比對是 0%），以及「回到頂端」按鈕截圖當下淡出動畫的時間差
+   - 手機選單展開＋產品子選單展開的畫面：完全一致
+   （截圖時外部資源 jsDelivr、Google Analytics 在此環境無法連線，新舊版相同處理；
+    Google Fonts 有載入。本機請再實際用瀏覽器看一次。）
+5. 互動測試（新版）：手機選單開／關（按鈕、Esc、點背景）、子選單、桌機下拉選單（移入／移出）、
+   搜尋視窗與自動聚焦、回到頂端、首頁輪播自動播放與箭頭、設備頁手機版每次顯示 1 張、
+   進場動畫捲到後全部顯示、關閉 JS 時沒有任何元素被隱藏 —— 全部正常，頁面沒有 JS 錯誤。
+6. 材料頁（中英）：互動表格原封不動搬入。新舊版表現相同：標準材料 22 列、飲用水 68 列，
+   篩選器可運作（勾選後列數正確變化），英文頁顯示 Polymer／Type…，中文頁顯示 材料／類型…，
+   語言判斷正常。表格本身沒有文字搜尋框（原本就沒有），「搜尋」是靠篩選器。
+7. 檔案一律 UTF-8、LF 換行。
+
+
+四、已知差異（全部列出）
+------------------------
+1. 【有意修正】目前頁面在選單裡的連結：舊版 HTTrack 把「目前所在頁」的選單連結改成 "/"，
+   例如在 O-Ring 頁點選單的 O-Ring 會跳回首頁；中文首頁的 logo 與「首頁」也指到英文首頁 "/"。
+   新版改成指向該頁自己（中文首頁指向 /zh/）。這是 verify.py 連結清單裡唯一的差異。
+2. 站內連結從相對路徑（../about-us/）改成站根路徑（/about-us/），解析後的網址相同。
+   影響：直接雙擊 HTML 檔用 file:// 開啟時連結與圖片不會正確（舊版其實也不完全正確），
+   本機預覽請用 http 伺服器，例如在 repo 根目錄執行 python -m http.server 8000。
+3. 刪掉的 WordPress 遺留標記：每頁 <head> 的 WordPress 預設樣式變數、gmpg profile 連結、
+   fonts.googleapis 的 dns-prefetch、HTTrack 註解、jQuery／Elementor／Blocksy 的設定 script；
+   正文裡的 data-e-action-hash 屬性（Elementor 燈箱用，內含本機 WordPress 主機名 tosinstatic.local）。
+4. 頁尾 email 的防垃圾信編碼：原本 WordPress 每次隨機編碼，現在固定為全部轉成 HTML 實體，
+   顯示與點擊結果相同。
+5. 燈箱：原本點圖可能同時觸發 Elementor 自帶燈箱與 fslightbox，現在只剩 fslightbox。
+6. 頁面專屬樣式的載入位置：原本夾在 Elementor 核心樣式與元件樣式之間，新版維持同樣順序
+   （site.css → 頁面樣式 → widgets.css）；原本延遲載入的 Blocksy 樣式改為一開始就載入。
+7. 任務說明要刪除 wp-content/uploads/elementor，但輪播縮圖放在
+   wp-content/uploads/elementor/thumbs/（8 張，被首頁／設備頁引用），為了「路徑不變、圖片不壞」
+   保留這 8 張，其餘（字型、CSS）已刪。
+
+
+五、圖片壓縮清單（>300KB 的 14 張，品質 82、保留色彩描述檔、檔名不變）
+--------------------------------------------------------------------
+/wp-content/uploads/2024/01/Building-1-scaled.jpg               520KB →  471KB  1920x1098 → 1920x1098  全幅背景（最寬 2560px 視窗）
+/wp-content/uploads/2024/01/Building-2-scaled.jpg               759KB →  635KB  1511x1920 → 1511x1920  全幅背景（最寬 2560px 視窗）
+/wp-content/uploads/2024/01/CNC4.jpg                            368KB →  136KB  1920x1171 → 1140x695   背景 cover，框 370×349
+/wp-content/uploads/2024/02/AOI_3.jpg                           407KB →  190KB  1920x1207 → 1310x824   背景 cover，框 370×413
+/wp-content/uploads/2025/09/air_1.jpg                           368KB →  150KB  1920x1312 → 1270x868   內文圖片
+/wp-content/uploads/2025/09/aoi_2.jpg                           354KB →  291KB  1920x893  → 1920x893   輪播燈箱大圖
+/wp-content/uploads/2025/09/curing_1.jpg                        378KB →  165KB  1920x1003 → 1280x669   內文圖片
+/wp-content/uploads/2025/09/curing_2.jpg                        330KB →  300KB  1920x1280 → 1920x1280  輪播燈箱大圖
+/wp-content/uploads/2025/09/cutting-Machine_1.jpg               382KB →  325KB  1920x1214 → 1920x1214  輪播燈箱大圖
+/wp-content/uploads/2025/09/cutting-Machine_2.jpg               300KB →  260KB  1920x1430 → 1920x1430  燈箱大圖＋背景
+/wp-content/uploads/2025/09/slice_1.jpg                         310KB →   50KB  1920x1266 →  740x488   背景 cover，框 370×200
+/wp-content/uploads/2026/03/IATF16949_2026-scaled.jpg           375KB →  353KB  1809x2560 → 1809x2560  證書，燈箱大圖
+/wp-content/uploads/2026/03/ISO9001_2026-scaled.jpg             388KB →  365KB  1809x2560 → 1809x2560  證書，燈箱大圖
+/wp-content/uploads/2026/03/Reach_RoHS_Declartion-2026-scaled.jpg  418KB →  375KB  1978x2560 → 1978x2560  證書，燈箱大圖
+合計 14 張：5.5MB → 4.0MB
+「最大顯示寬度」是用無頭瀏覽器在 390／768／1024／1440／1920／2560px 六種寬度實測；
+背景圖 cover 依框的寬高與圖片比例換算實際需要的寬度。燈箱會用到原圖者只重新壓縮、不縮小。
+證書高 2560px：2000px 上限我理解為寬度，證書寬 1809／1978 未超過，所以沒縮（讓燈箱放大時字看得清楚）。
+
+
+六、大小統計（不含 .git）
+-------------------------
+                     重建前（main）         重建後（static-rebuild）
+檔案數               2,228                  164（+ 本報告）
+總大小               126.6MB                約 13.5MB
+  plugins            68.1MB（1,229 檔）      刪除
+  wp-includes        37.7MB（592 檔）        刪除
+  themes             3.0MB（223 檔）         刪除
+  uploads            15.4MB（150 檔）        11.3MB（73 檔，其中 14 張壓縮）
+  30 頁 HTML         2.4MB                  1.4MB
+  assets/            —                      0.85MB（CSS 0.20MB、字型 0.47MB、site.js 12KB、swiper 0.14MB）
+  src/、tools/       —                      0.82MB（src 是 30 頁內容的原始檔，與 HTML 內容重複）
+每頁瀏覽器載入的 CSS／JS：原本約 25 個 CSS＋10 個 JS，現在 2 個 CSS＋1 個 JS（輪播頁多 1 個）。
+
+未達「約 10MB」目標：剩下的幾乎都是圖片（11.3MB）。試算把 100～300KB 的 37 張也用同樣品質重壓，
+只能再省約 0.58MB（原圖本身已壓得不錯）；要再明顯縮小只能降低燈箱大圖與證書的解析度，
+會影響點開放大時的清晰度，所以沒有做，請您決定是否需要。
+
+
+七、尚未完成或沒把握的地方
+--------------------------
+1. 搜尋功能：頁首的搜尋框外觀與開關正常，但送出後是 WordPress 的 ?s= 搜尋，靜態網站沒有搜尋引擎，
+   會回到首頁。舊的靜態版本也是如此（不是這次造成的）。可考慮之後移除搜尋鈕或改用站內搜尋服務。
+2. 頁尾電話連結是 tel:578-393-4937（Blocksy 範本的假號碼），顯示的是 +886 3 439 8801。
+   舊版就是這樣，這次照原樣沒改；建議改成 tel:+88634398801（改 src/layout/layout.html 一處即可）。
+3. <meta name="msapplication-TileImage"> 指向的 cropped-TOSIN-LOGO-...-270x270.png 原本就不存在
+   （main 分支也沒有這個檔），只影響 Windows 磁貼圖示，照原樣保留。
+4. 外部資源未能在雲端環境實測：fslightbox（jsDelivr）燈箱、GA4、Google 地圖 iframe 在此環境被網路擋住，
+   程式碼與原版相同，但請本機實際點圖確認燈箱、確認聯絡頁地圖。
+5. 截圖只測了 Chromium；Safari／Firefox 請本機或手機實際看一下（特別是手機選單與輪播）。
+6. CSS 精簡是用保守的 selector 比對，畫面比對雖一致，但沒被截圖涵蓋的狀態（例如滑鼠移到按鈕上的
+   顏色、鍵盤 focus 外框）若有缺漏，可從 main 分支的原始 CSS 找回規則。
+7. 材料頁表格內的程式與資料原封不動；之後若要更新材料資料，改 src/pages/material.html 與
+   src/pages/zh/material-zh.html 內的 JSON，再 build。
+8. hreflang 值沿用原本的 "en"、"zh"（沒有改成 zh-TW），選單語言切換連結的 hreflang 也照原樣是 zh-TW／en-US。
