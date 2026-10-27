@@ -1,0 +1,3 @@
+/* 由 tools/build_css.py 從原 WordPress（Blocksy 2.1 + Elementor 3.35）樣式合併精簡而成。 */
+a{transition:none !important}
+[data-reveal]{opacity:initial !important;transform:initial !important}
